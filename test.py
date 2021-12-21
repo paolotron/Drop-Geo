@@ -43,7 +43,7 @@ def test(args, eval_ds, model):
     logging.debug("Calculating recalls")
     distances, predictions = faiss_index.search(queries_features, max(args.recall_values))
     
-    #### For each query, check if the predictions are correct
+    # For each query, check if the predictions are correct
     positives_per_query = eval_ds.get_positives()
     # args.recall_values by default is [1, 5, 10, 20]
     recalls = np.zeros(len(args.recall_values))
