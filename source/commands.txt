@@ -1,0 +1,2 @@
+Commands that I found useful:
+python train.py --datasets_folder ../data/ --device cuda
