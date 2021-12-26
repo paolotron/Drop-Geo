@@ -3,6 +3,9 @@ import logging
 import torchvision
 import torch.nn as nn
 import torch.nn.functional as F
+from NetVlad import NetVlad
+
+NETVLAD = True
 
 
 class GeoLocalizationNet(nn.Module):
@@ -14,13 +17,19 @@ class GeoLocalizationNet(nn.Module):
     def __init__(self, args):
         super().__init__()
         self.backbone = get_backbone(args)
-        self.aggregation = nn.Sequential(L2Norm(),
-                                         torch.nn.AdaptiveAvgPool2d(1),
-                                         Flatten())
+
+        if args.netvlad_clusters is not None:
+            self.aggregation = nn.Sequential(L2Norm(),
+                                             NetVlad(dim=256, num_clusters=args.netvlad_clusters))
+        else:
+            self.aggregation = nn.Sequential(L2Norm(),
+                                             torch.nn.AdaptiveAvgPool2d(1),
+                                             Flatten())
 
     def forward(self, x):
         x = self.backbone(x)
         x = self.aggregation(x)
+
         return x
 
 
@@ -34,7 +43,10 @@ def get_backbone(args):
     logging.debug("Train only conv4 of the ResNet-18 (remove conv5), freeze the previous ones")
     layers = list(backbone.children())[:-3]
     backbone = torch.nn.Sequential(*layers)
-    args.features_dim = 256  # Number of channels in conv4
+    if args.netvlad_clusters is not None:
+        args.features_dim = args.netvlad_clusters * 256  # Number of features outputted by the vlad layer (clusters * conv4 chan)
+    else:
+        args.features_dim = 256  # Number of channels in conv4
     return backbone
 
 

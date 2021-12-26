@@ -6,7 +6,7 @@ import torch.nn.functional as function
 
 
 class NetVlad(nn.Module):
-    def __init__(self, num_clusters=64, dim=128, alpha=100.0, normalize_input=True):
+    def __init__(self, num_clusters=8, dim=256, alpha=100.0, normalize_input=True):
         super(NetVlad, self).__init__()
         self.num_clusters = num_clusters
         self.dim = dim
@@ -37,8 +37,8 @@ class NetVlad(nn.Module):
         x_flatten = x.view(N, C, -1)
 
         # calculate residuals to each clusters
-        residual = x_flatten.expand(self.num_clusters, -1, -1, -1).permute(1, 0, 2, 3) - \
-            self.centroids.expand(x_flatten.size(-1), -1, -1).permute(1, 2, 0).unsqueeze(0)
+        residual = x_flatten.expand(self.num_clusters, -1, -1, -1).permute(1, 0, 2, 3) \
+            - self.centroids.expand(x_flatten.size(-1), -1, -1).permute(1, 2, 0).unsqueeze(0)
         residual *= soft_assign.unsqueeze(2)
         vlad = residual.sum(dim=-1)
 
