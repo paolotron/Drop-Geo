@@ -36,6 +36,10 @@ def parse_arguments():
     parser.add_argument("--datasets_folder", type=str, required=True, help="Path with datasets")
     parser.add_argument("--exp_name", type=str, default="default",
                         help="Folder name of the current run (saved in ./runs/)")
+
+    # Network variants parameters
+    parser.add_argument("--netvlad_clusters", type=int, help="use vlad layer with specified number"
+                                                             " of clusters if not specified avgPooling is used instead")
     
     args = parser.parse_args()
     

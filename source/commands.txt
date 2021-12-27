@@ -1,0 +1,13 @@
+Commands that I found useful:
+
+Standard Train
+python train.py --datasets_folder ../data/ --device cuda
+
+Short Train (Big Batch Size WARNING)
+python train.py --datasets_folder ../data/ --device cuda --epochs_num 10 --train_batch_size 16 --queries_per_epoch 3000 --negs_num_per_query 5
+
+Short Train
+python train.py --datasets_folder ../data/ --device cuda --epochs_num 10 --queries_per_epoch 3000 --negs_num_per_query 5
+
+Short Train with netvlad
+python train.py --datasets_folder ../data/  --device cuda --epochs_num 10 --queries_per_epoch 3000 --negs_num_per_query 5 --netvlad_clusters 8
