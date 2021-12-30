@@ -11,3 +11,6 @@ python train.py --datasets_folder ../data/ --device cuda --epochs_num 10 --queri
 
 Short Train with netvlad
 python train.py --datasets_folder ../data/  --device cuda --epochs_num 10 --queries_per_epoch 3000 --negs_num_per_query 5 --netvlad_clusters 8
+
+Short Train with GeM
+python train.py --datasets_folder ../data/  --device cuda --epochs_num 10 --queries_per_epoch 3000 --negs_num_per_query 5 --gem_power 3 --exp_name ./runs/GeM
