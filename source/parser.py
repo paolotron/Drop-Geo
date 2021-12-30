@@ -40,6 +40,7 @@ def parse_arguments():
     # Network variants parameters
     parser.add_argument("--netvlad_clusters", type=int, help="use vlad layer with specified number"
                                                              " of clusters if not specified avgPooling is used instead")
+    parser.add_argument("--gem_power", type=float, help="use gem layer with initial p value")
     
     args = parser.parse_args()
     
