@@ -5,8 +5,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 from NetVlad import NetVlad
 
-NETVLAD = True
-
 
 class GeoLocalizationNet(nn.Module):
     """The model is composed of a backbone and an aggregation layer.
