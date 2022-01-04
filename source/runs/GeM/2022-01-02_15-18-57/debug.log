@@ -1,0 +1,22 @@
+2022-01-02 15:18:57   Arguments: Namespace(cache_refresh_rate=1000, datasets_folder='../data/', device='cuda', epochs_num=10, exp_name='./GeM', gem_power=3.0, infer_batch_size=16, lr=1e-05, margin=0.1, neg_samples_num=1000, negs_num_per_query=5, netvlad_clusters=None, num_workers=8, output_folder='runs/./GeM/2022-01-02_15-18-57', patience=3, queries_per_epoch=3000, recall_values=[1, 5, 10, 20], seed=0, train_batch_size=4, train_positives_dist_threshold=10, val_positive_dist_threshold=25)
+2022-01-02 15:18:57   The outputs are being saved in runs/./GeM/2022-01-02_15-18-57
+2022-01-02 15:18:57   Using 1 GPUs and 8 CPUs
+2022-01-02 15:18:57   Loading dataset Pitts30k from folder ../data/
+2022-01-02 15:18:58   There are 96 queries without any positives within the training set. They won't be considered as they're useless for training.
+2022-01-02 15:18:58   Train query set: < TripletsDataset, pitts30k - #database: 10000; #queries: 7320 >
+2022-01-02 15:18:58   Val set: < BaseDataset, pitts30k - #database: 10000; #queries: 7608 >
+2022-01-02 15:18:58   Test set: < BaseDataset, pitts30k - #database: 10000; #queries: 6816 >
+2022-01-02 15:18:59   Train only conv4 of the ResNet-18 (remove conv5), freeze the previous ones
+2022-01-02 15:19:01   Output dimension of the model is 256
+2022-01-02 15:19:01   Start training epoch: 00
+2022-01-02 15:19:01   Cache: 0 / 3
+2022-01-02 15:19:15   
+Traceback (most recent call last):
+  File "/media/paolo/Elements/my_work/DropGeo/source/train.py", line 69, in <module>
+    triplets_ds.compute_triplets(args, model)
+  File "/media/paolo/Elements/my_work/DropGeo/source/datasets_ws.py", line 217, in compute_triplets
+    cache = self.compute_cache(args, model, subset_ds, (len(self), args.features_dim))
+  File "/media/paolo/Elements/my_work/DropGeo/source/datasets_ws.py", line 178, in compute_cache
+    cache[indexes.numpy()] = features.cpu().numpy()
+KeyboardInterrupt
+

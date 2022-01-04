@@ -13,7 +13,7 @@ Short Train with netvlad
 python train.py --datasets_folder ../data/  --device cuda --epochs_num 10 --queries_per_epoch 3000 --negs_num_per_query 5 --netvlad_clusters 8
 
 Short Train with GeM
-python train.py --datasets_folder ../data/  --device cuda --epochs_num 10 --queries_per_epoch 3000 --negs_num_per_query 5 --gem_power 3 --exp_name ./runs/GeM
+python train.py --datasets_folder ../data/  --device cuda --epochs_num 10 --queries_per_epoch 3000 --gem_power 3 --exp_name ./runs/GeM
 
 Template per gli esperimenti
 --datasets_folder ../data/  --device cuda --epochs_num 20 --queries_per_epoch 3000 (--netvlad_clusters ?) (--num_workers ?) (--gem_power ?) --lr ?
@@ -22,7 +22,19 @@ Davide tests
 Test commands tried:
 
 Matteo tests
+
 Test commands tried:
 
-Paolo tests
+Paolo tests:
+
+--datasets_folder ../data/  --device cuda --epochs_num 20 --queries_per_epoch 3000 --netvlad_clusters 64 --num_workers 4 --lr 1e-6 --exp_name ./runs/NetVlad_abl --train_batch_size 2
+--datasets_folder ../data/  --device cuda --epochs_num 20 --queries_per_epoch 3000 --netvlad_clusters 64 --num_workers 4 --lr 1e-5 --exp_name ./runs/NetVlad_abl --train_batch_size 2
+--datasets_folder ../data/  --device cuda --epochs_num 20 --queries_per_epoch 3000 --netvlad_clusters 64 --num_workers 4 --lr 1e-4 --exp_name ./runs/NetVlad_abl --train_batch_size 2
+--datasets_folder ../data/  --device cuda --epochs_num 20 --queries_per_epoch 3000 --netvlad_clusters 32 --num_workers 4 --lr 1e-6 --exp_name ./runs/NetVlad_abl --train_batch_size 2
+--datasets_folder ../data/  --device cuda --epochs_num 20 --queries_per_epoch 3000 --netvlad_clusters 32 --num_workers 4 --lr 1e-5 --exp_name ./runs/NetVlad_abl --train_batch_size 2
+--datasets_folder ../data/  --device cuda --epochs_num 20 --queries_per_epoch 3000 --netvlad_clusters 32 --num_workers 4 --lr 1e-4 --exp_name ./runs/NetVlad_abl --train_batch_size 2
+--datasets_folder ../data/  --device cuda --epochs_num 20 --queries_per_epoch 3000 --netvlad_clusters 16 --num_workers 4 --lr 1e-6 --exp_name ./runs/NetVlad_abl --train_batch_size 2
+--datasets_folder ../data/  --device cuda --epochs_num 20 --queries_per_epoch 3000 --netvlad_clusters 16 --num_workers 4 --lr 1e-5 --exp_name ./runs/NetVlad_abl --train_batch_size 2
+--datasets_folder ../data/  --device cuda --epochs_num 20 --queries_per_epoch 3000 --netvlad_clusters 16 --num_workers 4 --lr 1e-4 --exp_name ./runs/NetVlad_abl --train_batch_size 2
+
 Test commands tried:
