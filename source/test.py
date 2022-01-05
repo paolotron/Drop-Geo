@@ -1,5 +1,5 @@
-import faiss
 import torch
+import faiss
 import logging
 import numpy as np
 from tqdm import tqdm
