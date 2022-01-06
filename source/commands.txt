@@ -19,6 +19,7 @@ Template per gli esperimenti
 --datasets_folder ../data/  --device cuda --epochs_num 20 --queries_per_epoch 3000 (--netvlad_clusters ?) (--num_workers ?) (--gem_power ?) --lr ?
 
 Davide tests
+--datasets_folder Drop-Geo/dataset/ --device cuda --epochs_num 20 --queries_per_epoch 3000 --netvlad_clusters 16 --num_workers 4 --lr 1e-5 --exp_name Drop-Geo/source/runs/NetVlad_sdg --train_batch_size 2 --optimizer SDG
 Test commands tried:
 
 Matteo tests
