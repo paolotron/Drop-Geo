@@ -18,6 +18,12 @@ base_transform = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
 ])
 
+augmented_transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    transforms.TrivialAugmentWide(fill=[255, 255, 255])
+])
+
 
 def path_to_pil_img(path):
     return Image.open(path).convert("RGB")
@@ -55,6 +61,7 @@ class BaseDataset(data.Dataset):
         super().__init__()
         self.args = args
         self.dataset_name = dataset_name
+        self.split = split
         self.dataset_folder = join(datasets_folder, dataset_name, "images", split)
         if not os.path.exists(self.dataset_folder): raise FileNotFoundError(
             f"Folder {self.dataset_folder} does not exist")
@@ -126,7 +133,7 @@ class TripletsDataset(BaseDataset):
 
         # Some queries might have no positive, we should remove those queries.
         queries_without_any_hard_positive = \
-        np.where(np.array([len(p) for p in self.hard_positives_per_query], dtype=object) == 0)[0]
+            np.where(np.array([len(p) for p in self.hard_positives_per_query], dtype=object) == 0)[0]
         if len(queries_without_any_hard_positive) != 0:
             logging.info(f"There are {len(queries_without_any_hard_positive)} queries without any positives " +
                          "within the training set. They won't be considered as they're useless for training.")
@@ -144,9 +151,14 @@ class TripletsDataset(BaseDataset):
             return super().__getitem__(index)
         query_index, best_positive_index, neg_indexes = torch.split(self.triplets_global_indexes[index],
                                                                     (1, 1, self.negs_num_per_query))
-        query = base_transform(path_to_pil_img(self.queries_paths[query_index]))
-        positive = base_transform(path_to_pil_img(self.database_paths[best_positive_index]))
-        negatives = [base_transform(path_to_pil_img(self.database_paths[i])) for i in neg_indexes]
+        if self.args.augment_data and self.split == "train":
+            query = augmented_transform(path_to_pil_img(self.queries_paths[query_index]))
+            positive = augmented_transform(path_to_pil_img(self.database_paths[best_positive_index]))
+            negatives = [augmented_transform(path_to_pil_img(self.database_paths[i])) for i in neg_indexes]
+        else:
+            query = base_transform(path_to_pil_img(self.queries_paths[query_index]))
+            positive = base_transform(path_to_pil_img(self.database_paths[best_positive_index]))
+            negatives = [base_transform(path_to_pil_img(self.database_paths[i])) for i in neg_indexes]
         images = torch.stack((query, positive, *negatives), 0)
         triplets_local_indexes = torch.empty((0, 3), dtype=torch.int)
         for neg_num in range(len(neg_indexes)):
