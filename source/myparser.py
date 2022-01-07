@@ -34,6 +34,7 @@ def parse_arguments():
     parser.add_argument("--train_positives_dist_threshold", type=int, default=10, help="Train threshold in meters")
     parser.add_argument('--recall_values', type=int, default=[1, 5, 10, 20], nargs="+",
                         help="Recalls to be computed, such as R@5.")
+    parser.add_argument("--augment_data", type=bool, default=False, help="If True dataset is augmented with random transforms")
     # Paths parameters
     parser.add_argument("--datasets_folder", type=str, required=True, help="Path with datasets")
     parser.add_argument("--exp_name", type=str, default="default",
