@@ -39,10 +39,13 @@ if __name__=='__main__':
         elif file['title'] == 'debug.log':
             debug = drive.CreateFile({'id': file['id']})
             debug.GetContentFile(path + "/debug.log")
-        elif file['title'] == 'current_model.pth':
-            current = drive.CreateFile({'id': file['id']})
-            current.GetContentFile(path + "/current_model.pth")
-        if not info or not debug or not current:
+        elif file['title'] == 'last_model.pth':
+            last = drive.CreateFile({'id': file['id']})
+            last.GetContentFile(path + "/last_model.pth")
+        elif file['title'] == 'best_model.pth':
+            best = drive.CreateFile({'id': file['id']})
+            best.GetContentFile(path + "/best_model.pth")
+        if not info or not debug or not last or not best:
             print("Files not found")
 
     torch.backends.cudnn.benchmark = True  # Provides a speedup
@@ -80,7 +83,7 @@ if __name__=='__main__':
         optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
     criterion_triplet = nn.TripletMarginLoss(margin=args.margin, p=2, reduction="sum")
 
-    checkpoint = torch.load(path+"/current_model.pth")
+    checkpoint = torch.load(path+"/last_model.pth")
     model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     epoch_num = checkpoint['epoch_num']
@@ -182,8 +185,11 @@ if __name__=='__main__':
         debug.SetContentFile(args.output_folder + "/debug.log")
         debug.Upload()
 
-        current.SetContentFile(args.output_folder + "/current_model.pth")
-        current.Upload()
+        last.SetContentFile(args.output_folder + "/current_model.pth")
+        last.Upload()
+
+        best.SetContentFile(args.output_folder + "/best_model.pth")
+        best.Upload()
 
 
     logging.info(f"Best R@5: {best_r5:.1f}")
@@ -196,13 +202,5 @@ if __name__=='__main__':
     recalls, recalls_str = test.test(args, test_ds, model)
     logging.info(f"Recalls on {test_ds}: {recalls_str}")
 
-    info.SetContentFile(args.output_folder + "/info.log")
-    info.Upload()
-
-    debug.SetContentFile(args.output_folder + "/debug.log")
-    debug.Upload()
-
-    current.SetContentFile(args.output_folder + "/current_model.pth")
-    current.Upload()
 
 

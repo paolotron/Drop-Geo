@@ -27,7 +27,8 @@ if __name__=='__main__':
 
     info = drive.CreateFile({'title': 'info.log'})
     debug = drive.CreateFile({'title': 'debug.log'})
-    current = drive.CreateFile({'title': 'current_model.pth'})
+    last = drive.CreateFile({'title': 'last_model.pth'})
+    best = drive.CreateFile({'title': 'best_model.pth'})
     path = drive.CreateFile({'title': 'path.txt'})
 
     torch.backends.cudnn.benchmark = True  # Provides a speedup
@@ -166,8 +167,11 @@ if __name__=='__main__':
         debug.SetContentFile(args.output_folder + "/debug.log")
         debug.Upload()
 
-        current.SetContentFile(args.output_folder + "/current_model.pth")
-        current.Upload()
+        last.SetContentFile(args.output_folder + "/last_model.pth")
+        last.Upload()
+
+        best.SetContentFile(args.output_folder + "/best_model.pth")
+        best.Upload()
 
     logging.info(f"Best R@5: {best_r5:.1f}")
     logging.info(f"Trained for {epoch_num + 1:02d} epochs, in total in {str(datetime.now() - start_time)[:-7]}")
@@ -179,12 +183,5 @@ if __name__=='__main__':
     recalls, recalls_str = test.test(args, test_ds, model)
     logging.info(f"Recalls on {test_ds}: {recalls_str}")
 
-    info.SetContentFile(args.output_folder + "/info.log")
-    info.Upload()
 
-    debug.SetContentFile(args.output_folder + "/debug.log")
-    debug.Upload()
-
-    current.SetContentFile(args.output_folder + "/current_model.pth")
-    current.Upload()
 
