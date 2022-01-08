@@ -25,39 +25,49 @@ if __name__=='__main__':
     gauth.credentials = GoogleCredentials.get_application_default()
     drive = GoogleDrive(gauth)
 
-    info = drive.CreateFile({'title': 'info.log'})
-    debug = drive.CreateFile({'title': 'debug.log'})
-    current = drive.CreateFile({'title': 'current_model.pth'})
-    path = drive.CreateFile({'title': 'path.txt'})
+    file_list = drive.ListFile({'q': "'root' in parents and trashed=false"}).GetList()
+    for file in file_list:
+        if file['title'] == 'path':
+            path = drive.CreateFile({'id': file['id']})
+            path.GetContentFile("/content/path.txt")
+    f = open("/content/path.txt", 'r')
+    path = f.readlines()[0]
+    for file in file_list:
+        if file['title'] == 'info.log':
+            info = drive.CreateFile({'id': file['id']})
+            info.GetContentFile(path + "/info.log")
+        elif file['title'] == 'debug.log':
+            debug = drive.CreateFile({'id': file['id']})
+            debug.GetContentFile(path + "/debug.log")
+        elif file['title'] == 'current_model.pth':
+            current = drive.CreateFile({'id': file['id']})
+            current.GetContentFile(path + "/current_model.pth")
+        if not info or not debug or not current:
+            print("Files not found")
 
     torch.backends.cudnn.benchmark = True  # Provides a speedup
 
     # Initial setup: parser, logging...
     args = myparser.parse_arguments()
     start_time = datetime.now()
-    args.output_folder = join("runs", args.exp_name, start_time.strftime('%Y-%m-%d_%H-%M-%S'))
-
-
-    path.SetContentString(args.output_folder)
-    path.Upload()
-
-    commons.setup_logging(args.output_folder)
+    args.output_folder = path
+    commons.setup_logging(args.output_folder, resume=True)
     commons.make_deterministic(args.seed)
-    logging.info(f"Arguments: {args}")
-    logging.info(f"The outputs are being saved in {args.output_folder}")
-    logging.info(f"Using {torch.cuda.device_count()} GPUs and {multiprocessing.cpu_count()} CPUs")
+    #logging.info(f"Arguments: {args}")
+    #logging.info(f"The outputs are being saved in {args.output_folder}")
+    #logging.info(f"Using {torch.cuda.device_count()} GPUs and {multiprocessing.cpu_count()} CPUs")
 
     # Creation of Datasets
-    logging.debug(f"Loading dataset Pitts30k from folder {args.datasets_folder}")
+    #logging.debug(f"Loading dataset Pitts30k from folder {args.datasets_folder}")
 
     triplets_ds = datasets_ws.TripletsDataset(args, args.datasets_folder, "pitts30k", "train", args.negs_num_per_query)
-    logging.info(f"Train query set: {triplets_ds}")
+    #logging.info(f"Train query set: {triplets_ds}")
 
     val_ds = datasets_ws.BaseDataset(args, args.datasets_folder, "pitts30k", "val")
-    logging.info(f"Val set: {val_ds}")
+    #logging.info(f"Val set: {val_ds}")
 
     test_ds = datasets_ws.BaseDataset(args, args.datasets_folder, "pitts30k", "test")
-    logging.info(f"Test set: {test_ds}")
+    #logging.info(f"Test set: {test_ds}")
 
     # Initialize model
     model = network.GeoLocalizationNet(args)
@@ -70,10 +80,15 @@ if __name__=='__main__':
         optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
     criterion_triplet = nn.TripletMarginLoss(margin=args.margin, p=2, reduction="sum")
 
-    best_r5 = 0
-    not_improved_num = 0
+    checkpoint = torch.load(path+"/current_model.pth")
+    model.load_state_dict(checkpoint['model_state_dict'])
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    epoch_num = checkpoint['epoch_num']
+    recalls = checkpoint['recalls']
+    best_r5 = checkpoint['best_r5']
+    not_improved_num = checkpoint['not_improved_num']
 
-    logging.info(f"Output dimension of the model is {args.features_dim}")
+    #logging.info(f"Output dimension of the model is {args.features_dim}")
 
     # Training loop
     for epoch_num in range(args.epochs_num):
@@ -140,6 +155,7 @@ if __name__=='__main__':
 
         is_best = recalls[1] > best_r5
 
+
         # If recall@5 did not improve for "many" epochs, stop training
         if is_best:
             logging.info(f"Improved: previous best R@5 = {best_r5:.1f}, current R@5 = {recalls[1]:.1f}")
@@ -169,6 +185,7 @@ if __name__=='__main__':
         current.SetContentFile(args.output_folder + "/current_model.pth")
         current.Upload()
 
+
     logging.info(f"Best R@5: {best_r5:.1f}")
     logging.info(f"Trained for {epoch_num + 1:02d} epochs, in total in {str(datetime.now() - start_time)[:-7]}")
 
@@ -187,4 +204,5 @@ if __name__=='__main__':
 
     current.SetContentFile(args.output_folder + "/current_model.pth")
     current.Upload()
+
 
