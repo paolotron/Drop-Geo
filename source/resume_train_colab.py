@@ -35,22 +35,22 @@ if __name__=='__main__':
     path = f.readlines()[0]
     f.close()
 
-    if not os.path.exists('Drop-Geo/source/' + path):
-      os.makedirs('Drop-Geo/source/' + path)
+    if not os.path.exists(path):
+      os.makedirs(path)
 
     for file in file_list:
       if file['title'] == 'info.log':
           info = drive.CreateFile({'id': file['id']})
-          info.GetContentFile('/content/Drop-Geo/source/' + path + "/info.log")
+          info.GetContentFile(path + "/info.log")
       elif file['title'] == 'debug.log':
           debug = drive.CreateFile({'id': file['id']})
-          debug.GetContentFile('/content/Drop-Geo/source/' + path + "/debug.log")
+          debug.GetContentFile(path + "/debug.log")
       elif file['title'] == 'last_model.pth':
           last = drive.CreateFile({'id': file['id']})
-          last.GetContentFile('/content/Drop-Geo/source/' + path + "/last_model.pth")
+          last.GetContentFile(path + "/last_model.pth")
       elif file['title'] == 'best_model.pth':
           best = drive.CreateFile({'id': file['id']})
-          best.GetContentFile('/content/Drop-Geo/source/' + path + "/best_model.pth")
+          best.GetContentFile(path + "/best_model.pth")
     if not info or not debug or not last or not best:
         print("Files not found")
 
@@ -60,7 +60,7 @@ if __name__=='__main__':
     args = myparser.parse_arguments()
     start_time = datetime.now()
     args.output_folder = path
-    commons.setup_logging('/content/Drop-Geo/source/' + args.output_folder, resume=True)
+    commons.setup_logging(args.output_folder, resume=True)
     commons.make_deterministic(args.seed)
     #logging.info(f"Arguments: {args}")
     #logging.info(f"The outputs are being saved in {args.output_folder}")
@@ -89,7 +89,7 @@ if __name__=='__main__':
         optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
     criterion_triplet = nn.TripletMarginLoss(margin=args.margin, p=2, reduction="sum")
 
-    checkpoint = torch.load('/content/Drop-Geo/source/' + path + "/last_model.pth")
+    checkpoint = torch.load(path + "/last_model.pth")
     model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     epoch_num = checkpoint['epoch_num'] + 1
@@ -178,6 +178,7 @@ if __name__=='__main__':
                 logging.info(f"Performance did not improve for {not_improved_num} epochs. Stop training.")
                 break
         epoch_num += 1
+
         # Save checkpoint, which contains all training parameters
         util.save_checkpoint(args, {"epoch_num": epoch_num, "model_state_dict": model.state_dict(),
                                     "optimizer_state_dict": optimizer.state_dict(), "recalls": recalls,
