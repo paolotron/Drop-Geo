@@ -41,13 +41,13 @@ if __name__=='__main__':
     for file in file_list:
       if file['title'] == 'info.log':
           info = drive.CreateFile({'id': file['id']})
-          info.GetContentFile(path + "/info.log")
+          info.GetContentFile('/content/Drop-Geo/source/' + path + "/info.log")
       elif file['title'] == 'debug.log':
           debug = drive.CreateFile({'id': file['id']})
-          debug.GetContentFile(path + "/debug.log")
+          debug.GetContentFile('/content/Drop-Geo/source/' + path + "/debug.log")
       elif file['title'] == 'last_model.pth':
           last = drive.CreateFile({'id': file['id']})
-          last.GetContentFile(path + "/last_model.pth")
+          last.GetContentFile('/content/Drop-Geo/source/' + path + "/last_model.pth")
       elif file['title'] == 'best_model.pth':
           best = drive.CreateFile({'id': file['id']})
           best.GetContentFile('/content/Drop-Geo/source/' + path + "/best_model.pth")
