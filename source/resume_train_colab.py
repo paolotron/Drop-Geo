@@ -60,7 +60,7 @@ if __name__=='__main__':
     args = myparser.parse_arguments()
     start_time = datetime.now()
     args.output_folder = path
-    commons.setup_logging(args.output_folder, resume=True)
+    commons.setup_logging('/content/Drop-Geo/source/' + args.output_folder, resume=True)
     commons.make_deterministic(args.seed)
     #logging.info(f"Arguments: {args}")
     #logging.info(f"The outputs are being saved in {args.output_folder}")
@@ -89,7 +89,7 @@ if __name__=='__main__':
         optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
     criterion_triplet = nn.TripletMarginLoss(margin=args.margin, p=2, reduction="sum")
 
-    checkpoint = torch.load(path+"/last_model.pth")
+    checkpoint = torch.load('/content/Drop-Geo/source/' + path + "/last_model.pth")
     model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     epoch_num = checkpoint['epoch_num'] + 1
