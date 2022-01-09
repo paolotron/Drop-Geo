@@ -18,6 +18,7 @@ from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 from google.colab import auth
 from oauth2client.client import GoogleCredentials
+import os
 
 if __name__=='__main__':
     auth.authenticate_user()
@@ -27,26 +28,31 @@ if __name__=='__main__':
 
     file_list = drive.ListFile({'q': "'root' in parents and trashed=false"}).GetList()
     for file in file_list:
-        if file['title'] == 'path':
+        if file['title'] == 'path.txt':
             path = drive.CreateFile({'id': file['id']})
             path.GetContentFile("/content/path.txt")
-    f = open("/content/path.txt", 'r')
+    f = open("path.txt", 'r')
     path = f.readlines()[0]
+    f.close()
+
+    if not os.path.exists('Drop-Geo/source/' + path):
+      os.makedirs('Drop-Geo/source/' + path)
+
     for file in file_list:
-        if file['title'] == 'info.log':
-            info = drive.CreateFile({'id': file['id']})
-            info.GetContentFile(path + "/info.log")
-        elif file['title'] == 'debug.log':
-            debug = drive.CreateFile({'id': file['id']})
-            debug.GetContentFile(path + "/debug.log")
-        elif file['title'] == 'last_model.pth':
-            last = drive.CreateFile({'id': file['id']})
-            last.GetContentFile(path + "/last_model.pth")
-        elif file['title'] == 'best_model.pth':
-            best = drive.CreateFile({'id': file['id']})
-            best.GetContentFile(path + "/best_model.pth")
-        if not info or not debug or not last or not best:
-            print("Files not found")
+      if file['title'] == 'info.log':
+          info = drive.CreateFile({'id': file['id']})
+          info.GetContentFile(path + "/info.log")
+      elif file['title'] == 'debug.log':
+          debug = drive.CreateFile({'id': file['id']})
+          debug.GetContentFile(path + "/debug.log")
+      elif file['title'] == 'last_model.pth':
+          last = drive.CreateFile({'id': file['id']})
+          last.GetContentFile(path + "/last_model.pth")
+      elif file['title'] == 'best_model.pth':
+          best = drive.CreateFile({'id': file['id']})
+          best.GetContentFile('/content/Drop-Geo/source/' + path + "/best_model.pth")
+    if not info or not debug or not last or not best:
+        print("Files not found")
 
     torch.backends.cudnn.benchmark = True  # Provides a speedup
 
@@ -86,7 +92,7 @@ if __name__=='__main__':
     checkpoint = torch.load(path+"/last_model.pth")
     model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-    epoch_num = checkpoint['epoch_num']
+    epoch_num = checkpoint['epoch_num'] + 1
     recalls = checkpoint['recalls']
     best_r5 = checkpoint['best_r5']
     not_improved_num = checkpoint['not_improved_num']
@@ -94,7 +100,7 @@ if __name__=='__main__':
     #logging.info(f"Output dimension of the model is {args.features_dim}")
 
     # Training loop
-    for epoch_num in range(args.epochs_num):
+    while epoch_num < args.epochs_num:
         logging.info(f"Start training epoch: {epoch_num:02d}")
 
         epoch_start_time = datetime.now()
@@ -171,7 +177,7 @@ if __name__=='__main__':
             if not_improved_num >= args.patience:
                 logging.info(f"Performance did not improve for {not_improved_num} epochs. Stop training.")
                 break
-
+        epoch_num += 1
         # Save checkpoint, which contains all training parameters
         util.save_checkpoint(args, {"epoch_num": epoch_num, "model_state_dict": model.state_dict(),
                                     "optimizer_state_dict": optimizer.state_dict(), "recalls": recalls,
