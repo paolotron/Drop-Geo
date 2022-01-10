@@ -192,7 +192,7 @@ if __name__=='__main__':
         debug.SetContentFile(args.output_folder + "/debug.log")
         debug.Upload()
 
-        last.SetContentFile(args.output_folder + "/current_model.pth")
+        last.SetContentFile(args.output_folder + "/last_model.pth")
         last.Upload()
 
         best.SetContentFile(args.output_folder + "/best_model.pth")
