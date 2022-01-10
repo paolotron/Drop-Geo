@@ -1,7 +1,10 @@
 import math
+import os
+
 import torch
 import logging
 import numpy as np
+import h5py
 from tqdm import tqdm
 import torch.nn as nn
 import multiprocessing
@@ -15,7 +18,7 @@ import commons
 import network
 import datasets_ws
 
-if __name__=='__main__':
+if __name__ == '__main__':
     torch.backends.cudnn.benchmark = True  # Provides a speedup
 
     # Initial setup: parser, logging...
@@ -42,6 +45,19 @@ if __name__=='__main__':
 
     # Initialize model
     model = network.GeoLocalizationNet(args)
+
+    if args.netvlad_clusters is not None:
+        init_cache = join(args.datasets_folder, 'centroids',
+                          "pitts_30k" + '_' + str(args.netvlad_clusters) + '_desc_cen.hdf5')
+        if not os.path.isfile(init_cache):
+            logging.info(f"{init_cache} not found, run cluster.py with same arguments before train.py, exiting")
+            exit(1)
+        with h5py.File(init_cache, mode='r') as h5:
+            centroids = h5.get("centroids")[...]
+            train_desc = h5.get("descriptors")[...]
+            model.aggregation[1].init_params(centroids, train_desc)
+            del centroids, train_desc
+
     model = model.to(args.device)
 
     # Setup Optimizer and Loss
@@ -123,7 +139,8 @@ if __name__=='__main__':
 
         # Save checkpoint, which contains all training parameters
         util.save_checkpoint(args, {"epoch_num": epoch_num, "model_state_dict": model.state_dict(),
-                                    "optimizer_state_dict": optimizer.state_dict(), "recalls": recalls, "best_r5": best_r5,
+                                    "optimizer_state_dict": optimizer.state_dict(), "recalls": recalls,
+                                    "best_r5": best_r5,
                                     "not_improved_num": not_improved_num
                                     }, is_best, filename="last_model.pth")
 
