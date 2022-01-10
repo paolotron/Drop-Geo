@@ -38,4 +38,7 @@ Paolo tests:
 --datasets_folder ../data/  --device cuda --epochs_num 20 --queries_per_epoch 3000 --netvlad_clusters 16 --num_workers 4 --lr 1e-5 --exp_name ./runs/NetVlad_abl --train_batch_size 2
 --datasets_folder ../data/  --device cuda --epochs_num 20 --queries_per_epoch 3000 --netvlad_clusters 16 --num_workers 4 --lr 1e-4 --exp_name ./runs/NetVlad_abl --train_batch_size 2
 
+Augment dataset
+--datasets_folder ../data/  --device cuda --epochs_num 20 --queries_per_epoch 3000 --netvlad_clusters 32 --num_workers 4 --lr 1e-4 --exp_name ./runs/Augment --augment_data True
+
 Test commands tried:

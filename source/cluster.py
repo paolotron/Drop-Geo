@@ -31,7 +31,7 @@ if __name__ == '__main__':
     initcache = join(args.datasets_folder, 'centroids',
                      "pitts_30k" + '_' + str(args.netvlad_clusters) + '_desc_cen.hdf5')
     model = network.get_backbone(args)
-    model.to(args.devicemodel)
+    model.to(args.device)
     with h5py.File(initcache, mode='w') as h5:
         with torch.no_grad():
             model.eval()

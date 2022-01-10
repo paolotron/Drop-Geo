@@ -18,12 +18,30 @@ base_transform = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
 ])
 
-augmented_transform = transforms.Compose([
+augmented_transform_trivial = transforms.Compose([
+    transforms.TrivialAugmentWide(fill=[255, 255, 255]),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    transforms.TrivialAugmentWide(fill=[255, 255, 255])
 ])
 
+augmented_transform_cropping = transforms.Compose([
+    transforms.RandomApply([transforms.RandomCrop((480, 640))], 0.3),
+    transforms.RandomHorizontalFlip(),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+])
+
+augmented_transform_cropping_jitter = transforms.Compose([
+    transforms.RandomApply([transforms.RandomCrop((480, 640))], 0.3),
+    transforms.RandomHorizontalFlip(),
+    transforms.ColorJitter(),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+])
+
+transform_list = [base_transform,
+                  augmented_transform_trivial,
+                  augmented_transform_cropping,
+                  augmented_transform_cropping_jitter]
 
 def path_to_pil_img(path):
     return Image.open(path).convert("RGB")
@@ -152,9 +170,10 @@ class TripletsDataset(BaseDataset):
         query_index, best_positive_index, neg_indexes = torch.split(self.triplets_global_indexes[index],
                                                                     (1, 1, self.negs_num_per_query))
         if self.args.augment_data and self.split == "train":
-            query = augmented_transform(path_to_pil_img(self.queries_paths[query_index]))
-            positive = augmented_transform(path_to_pil_img(self.database_paths[best_positive_index]))
-            negatives = [augmented_transform(path_to_pil_img(self.database_paths[i])) for i in neg_indexes]
+            transform = transform_list[self.args.augment_data]
+            query = transform(path_to_pil_img(self.queries_paths[query_index]))
+            positive = transform(path_to_pil_img(self.database_paths[best_positive_index]))
+            negatives = [transform(path_to_pil_img(self.database_paths[i])) for i in neg_indexes]
         else:
             query = base_transform(path_to_pil_img(self.queries_paths[query_index]))
             positive = base_transform(path_to_pil_img(self.database_paths[best_positive_index]))
