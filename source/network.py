@@ -4,6 +4,7 @@ import torchvision
 import torch.nn as nn
 import torch.nn.functional as F
 from NetVlad import NetVlad
+from GeM import GeM
 
 
 class GeoLocalizationNet(nn.Module):
@@ -15,10 +16,15 @@ class GeoLocalizationNet(nn.Module):
     def __init__(self, args):
         super().__init__()
         self.backbone = get_backbone(args)
+        self.encoder_dim = 256
 
-        if args.netvlad_clusters:
+        if args.netvlad_clusters is not None:
             self.aggregation = nn.Sequential(L2Norm(),
-                                             NetVlad(dim=256, num_clusters=args.netvlad_clusters))
+                                             NetVlad(dim=self.encoder_dim, num_clusters=args.netvlad_clusters))
+        elif args.gem_power is not None:
+            self.aggregation = nn.Sequential(L2Norm(),
+                                             GeM(p=args.gem_power),
+                                             Flatten())
         else:
             self.aggregation = nn.Sequential(L2Norm(),
                                              torch.nn.AdaptiveAvgPool2d(1),
