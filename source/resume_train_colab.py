@@ -186,6 +186,8 @@ if __name__=='__main__':
                                     "not_improved_num": not_improved_num
                                     }, is_best, filename="last_model.pth")
 
+        gauth.Refresh()
+
         info.SetContentFile(args.output_folder + "/info.log")
         info.Upload()
 
