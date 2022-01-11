@@ -163,6 +163,12 @@ if __name__=='__main__':
 
         gauth.Refresh()
 
+        if gauth.access_token_expired:
+            auth.authenticate_user()
+            gauth = GoogleAuth()
+            gauth.credentials = GoogleCredentials.get_application_default()
+            drive = GoogleDrive(gauth)
+
         info.SetContentFile(args.output_folder + "/info.log")
         info.Upload()
 
