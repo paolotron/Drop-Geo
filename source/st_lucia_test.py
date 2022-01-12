@@ -21,6 +21,7 @@ if __name__ == '__main__':
     model = model.to(args.device)
 
     # Test best model on test set
+    # Path da rivedere
     best_model_state_dict = torch.load(join("/best_models", "best_model.pth"))["model_state_dict"]
     model.load_state_dict(best_model_state_dict)
 
