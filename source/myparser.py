@@ -39,8 +39,8 @@ def parse_arguments():
                                                                     "1: Trivial Transforms "
                                                                     "2: Random Croppings"
                                                                     "3: Random Croppings and jitter")
-    parser.add_argument("--colab", type=bool, default=False)
-    parser.add_argument("--resume", type=bool, default=False)
+    parser.add_argument("--colab", default=False, type=lambda x: (str(x).lower() == 'true')))
+    parser.add_argument("--resume", default=False, type=lambda x: (str(x).lower() == 'true')))
     # Paths parameters
     parser.add_argument("--datasets_folder", type=str, required=True, help="Path with datasets")
     parser.add_argument("--exp_name", type=str, default="default",
