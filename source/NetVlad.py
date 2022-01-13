@@ -15,7 +15,7 @@ class NetVlad(nn.Module):
         self.dim = dim
         self.alpha = alpha
         self.normalize_input = normalize_input
-        self.conv = nn.Conv2d(dim, num_clusters, kernel_size=(1, 1), bias=True)
+        self.conv = nn.Conv2d(dim, num_clusters, kernel_size=(1, 1), bias=False)
         self.centroids = nn.Parameter(torch.rand(num_clusters, dim))
 
     def init_params(self, clusters, train_desc):
