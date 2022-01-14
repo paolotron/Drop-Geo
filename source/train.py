@@ -68,6 +68,7 @@ if __name__ == '__main__':
             print("Files not found")
 
         args.output_folder = path
+        commons.setup_logging(args.output_folder, resume=True)
     elif args.colab:
         auth.authenticate_user()
         gauth = GoogleAuth()
@@ -81,14 +82,15 @@ if __name__ == '__main__':
         path = drive.CreateFile({'title': 'path.txt'})
 
         args.output_folder = join("Drop-Geo/source/runs", args.exp_name, start_time.strftime('%Y-%m-%d_%H-%M-%S'))
+        commons.setup_logging(args.output_folder)
     else:
         args.output_folder = join("runs", args.exp_name, start_time.strftime('%Y-%m-%d_%H-%M-%S'))
+        commons.setup_logging(args.output_folder)
 
     torch.backends.cudnn.benchmark = True  # Provides a speedup
 
-
-    commons.setup_logging(args.output_folder)
     commons.make_deterministic(args.seed)
+
     if not args.resume:
         logging.info(f"Arguments: {args}")
         logging.info(f"The outputs are being saved in {args.output_folder}")
