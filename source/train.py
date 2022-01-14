@@ -24,9 +24,9 @@ from oauth2client.client import GoogleCredentials
 if __name__ == '__main__':
     """
         PER USARE COLAB
-        --colab True
+        --colab
         PER FARE RESUME
-        rimuovere '--colab True' e inserire '--resume True'
+        rimuovere '--colab' e inserire '--resume'
     """
     # Initial setup: parser, logging...
     args = myparser.parse_arguments()
