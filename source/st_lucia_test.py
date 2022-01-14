@@ -1,4 +1,13 @@
-
+import myparser
+import commons
+import logging
+import datasets_ws
+from os.path import join
+from datetime import datetime
+import torch
+import multiprocessing
+import network
+import test
 
 if __name__ == '__main__':
     args = myparser.parse_arguments()
@@ -22,7 +31,7 @@ if __name__ == '__main__':
 
     # Test best model on test set
     # Path da rivedere
-    best_model_state_dict = torch.load(join("/best_models", "best_model.pth"))["model_state_dict"]
+    best_model_state_dict = torch.load("../best_models/best_model.pth")["model_state_dict"]
     model.load_state_dict(best_model_state_dict)
 
     recalls, recalls_str = test.test(args, test_ds, model)
