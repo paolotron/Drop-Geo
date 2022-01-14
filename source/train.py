@@ -211,6 +211,7 @@ if __name__ == '__main__':
         logging.info(f"Recalls on val set {val_ds}: {recalls_str}")
 
         is_best = recalls[1] > best_r5
+        epoch_num += 1
 
         # Save checkpoint, which contains all training parameters
         util.save_checkpoint(args, {"epoch_num": epoch_num, "model_state_dict": model.state_dict(),
