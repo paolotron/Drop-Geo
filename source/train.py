@@ -1,6 +1,5 @@
 import math
 import os
-
 import torch
 import logging
 import numpy as np
@@ -17,31 +16,97 @@ import myparser
 import commons
 import network
 import datasets_ws
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+from google.colab import auth
+from oauth2client.client import GoogleCredentials
 
 if __name__ == '__main__':
-    torch.backends.cudnn.benchmark = True  # Provides a speedup
-
+    """
+        PER USARE COLAB
+        --colab
+        PER FARE RESUME
+        rimuovere '--colab' e inserire '--resume'
+    """
     # Initial setup: parser, logging...
     args = myparser.parse_arguments()
     start_time = datetime.now()
-    args.output_folder = join("runs", args.exp_name, start_time.strftime('%Y-%m-%d_%H-%M-%S'))
-    commons.setup_logging(args.output_folder)
-    commons.make_deterministic(args.seed)
-    logging.info(f"Arguments: {args}")
-    logging.info(f"The outputs are being saved in {args.output_folder}")
-    logging.info(f"Using {torch.cuda.device_count()} GPUs and {multiprocessing.cpu_count()} CPUs")
 
-    # Creation of Datasets
-    logging.debug(f"Loading dataset Pitts30k from folder {args.datasets_folder}")
+    if args.resume:
+        auth.authenticate_user()
+        gauth = GoogleAuth()
+        gauth.credentials = GoogleCredentials.get_application_default()
+        drive = GoogleDrive(gauth)
+
+        file_list = drive.ListFile({'q': "'root' in parents and trashed=false"}).GetList()
+        for file in file_list:
+            if file['title'] == 'path.txt':
+                path = drive.CreateFile({'id': file['id']})
+                path.GetContentFile("/content/path.txt")
+        f = open("path.txt", 'r')
+        path = f.readlines()[0]
+        f.close()
+
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+        for file in file_list:
+            if file['title'] == 'info.log':
+                info = drive.CreateFile({'id': file['id']})
+                info.GetContentFile(path + "/info.log")
+            elif file['title'] == 'debug.log':
+                debug = drive.CreateFile({'id': file['id']})
+                debug.GetContentFile(path + "/debug.log")
+            elif file['title'] == 'last_model.pth':
+                last = drive.CreateFile({'id': file['id']})
+                last.GetContentFile(path + "/last_model.pth")
+            elif file['title'] == 'best_model.pth':
+                best = drive.CreateFile({'id': file['id']})
+                best.GetContentFile(path + "/best_model.pth")
+
+        if not info or not debug or not last or not best:
+            print("Files not found")
+
+        args.output_folder = path
+        commons.setup_logging(args.output_folder, resume=True)
+    elif args.colab:
+        auth.authenticate_user()
+        gauth = GoogleAuth()
+        gauth.credentials = GoogleCredentials.get_application_default()
+        drive = GoogleDrive(gauth)
+
+        info = drive.CreateFile({'title': 'info.log'})
+        debug = drive.CreateFile({'title': 'debug.log'})
+        last = drive.CreateFile({'title': 'last_model.pth'})
+        best = drive.CreateFile({'title': 'best_model.pth'})
+        path = drive.CreateFile({'title': 'path.txt'})
+
+        args.output_folder = join("Drop-Geo/source/runs", args.exp_name, start_time.strftime('%Y-%m-%d_%H-%M-%S'))
+        commons.setup_logging(args.output_folder)
+    else:
+        args.output_folder = join("runs", args.exp_name, start_time.strftime('%Y-%m-%d_%H-%M-%S'))
+        commons.setup_logging(args.output_folder)
+
+    torch.backends.cudnn.benchmark = True  # Provides a speedup
+
+    commons.make_deterministic(args.seed)
+
+    if not args.resume:
+        logging.info(f"Arguments: {args}")
+        logging.info(f"The outputs are being saved in {args.output_folder}")
+        logging.info(f"Using {torch.cuda.device_count()} GPUs and {multiprocessing.cpu_count()} CPUs")
+
+        # Creation of Datasets
+        logging.debug(f"Loading dataset Pitts30k from folder {args.datasets_folder}")
 
     triplets_ds = datasets_ws.TripletsDataset(args, args.datasets_folder, "pitts30k", "train", args.negs_num_per_query)
-    logging.info(f"Train query set: {triplets_ds}")
-
     val_ds = datasets_ws.BaseDataset(args, args.datasets_folder, "pitts30k", "val")
-    logging.info(f"Val set: {val_ds}")
-
     test_ds = datasets_ws.BaseDataset(args, args.datasets_folder, "pitts30k", "test")
-    logging.info(f"Test set: {test_ds}")
+
+    if not args.resume:
+        logging.info(f"Train query set: {triplets_ds}")
+        logging.info(f"Val set: {val_ds}")
+        logging.info(f"Test set: {test_ds}")
 
     # Initialize model
     model = network.GeoLocalizationNet(args)
@@ -69,11 +134,21 @@ if __name__ == '__main__':
 
     best_r5 = 0
     not_improved_num = 0
+    epoch_num = 0
+    if args.resume:
+        checkpoint = torch.load(path + "/last_model.pth")
+        model.load_state_dict(checkpoint['model_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        epoch_num = checkpoint['epoch_num'] + 1
+        recalls = checkpoint['recalls']
+        best_r5 = checkpoint['best_r5']
+        not_improved_num = checkpoint['not_improved_num']
 
-    logging.info(f"Output dimension of the model is {args.features_dim}")
+    if not args.resume:
+        logging.info(f"Output dimension of the model is {args.features_dim}")
 
     # Training loop
-    for epoch_num in range(args.epochs_num):
+    while epoch_num < args.epochs_num:
         logging.info(f"Start training epoch: {epoch_num:02d}")
 
         epoch_start_time = datetime.now()
@@ -136,6 +211,7 @@ if __name__ == '__main__':
         logging.info(f"Recalls on val set {val_ds}: {recalls_str}")
 
         is_best = recalls[1] > best_r5
+        epoch_num += 1
 
         # Save checkpoint, which contains all training parameters
         util.save_checkpoint(args, {"epoch_num": epoch_num, "model_state_dict": model.state_dict(),
@@ -156,6 +232,26 @@ if __name__ == '__main__':
             if not_improved_num >= args.patience:
                 logging.info(f"Performance did not improve for {not_improved_num} epochs. Stop training.")
                 break
+        if args.colab or args.resume:
+            gauth.Refresh()
+
+            if gauth.access_token_expired:
+                auth.authenticate_user()
+                gauth = GoogleAuth()
+                gauth.credentials = GoogleCredentials.get_application_default()
+                drive = GoogleDrive(gauth)
+
+            info.SetContentFile(args.output_folder + "/info.log")
+            info.Upload()
+
+            debug.SetContentFile(args.output_folder + "/debug.log")
+            debug.Upload()
+
+            last.SetContentFile(args.output_folder + "/last_model.pth")
+            last.Upload()
+
+            best.SetContentFile(args.output_folder + "/best_model.pth")
+            best.Upload()
 
     logging.info(f"Best R@5: {best_r5:.1f}")
     logging.info(f"Trained for {epoch_num + 1:02d} epochs, in total in {str(datetime.now() - start_time)[:-7]}")

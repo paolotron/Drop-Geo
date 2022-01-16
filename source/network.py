@@ -53,7 +53,7 @@ def get_backbone(args):
             break
         for params in child.parameters():
             params.requires_grad = False
-    logging.debug("Train only conv4 of the ResNet-18 (remove conv5), freeze the previous ones")
+    # logging.debug("Train only conv4 of the ResNet-18 (remove conv5), freeze the previous ones")
     layers = list(backbone.children())[:-3]
     backbone = torch.nn.Sequential(*layers)
     if args.netvlad_clusters is not None:
@@ -61,6 +61,8 @@ def get_backbone(args):
     else:
         args.features_dim = 256  # Number of channels in conv4
     return backbone
+
+
 
 
 class Flatten(torch.nn.Module):
