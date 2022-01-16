@@ -38,7 +38,9 @@ def parse_arguments():
                                                                     "0: No transforms "
                                                                     "1: Trivial Transforms "
                                                                     "2: Random Croppings"
-                                                                    "3: Random Croppings and jitter")
+                                                                    "3: Random Croppings and jitter"
+                                                                    "4: AutoAugment from IMAGENET")
+    parser.add_argument("--resize", type=int, default=None, nargs='+', help="Resize images to dimension specified")
     # Paths parameters
     parser.add_argument("--datasets_folder", type=str, required=True, help="Path with datasets")
     parser.add_argument("--exp_name", type=str, default="default",
@@ -48,6 +50,7 @@ def parse_arguments():
     parser.add_argument("--netvlad_clusters", type=int, help="use vlad layer with specified number"
                                                              " of clusters if not specified avgPooling is used instead")
     parser.add_argument("--gem_power", type=float, help="use gem layer with initial p value")
+    parser.add_argument("--attention", type=bool, default=False, help="use CRAM attention layer between backbone and aggregation layer")
     
     args = parser.parse_args()
     

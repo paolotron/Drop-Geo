@@ -3,6 +3,8 @@ import logging
 import torchvision
 import torch.nn as nn
 import torch.nn.functional as F
+
+from CBAM import CBAMBlock
 from NetVlad import NetVlad
 from GeM import GeM
 
@@ -17,6 +19,11 @@ class GeoLocalizationNet(nn.Module):
         super().__init__()
         self.backbone = get_backbone(args)
         self.encoder_dim = 256
+        self.attention = None
+
+        if args.attention:
+            self.attention = CBAMBlock(channel=256)
+            self.attention.init_weights()
 
         if args.netvlad_clusters is not None:
             self.aggregation = nn.Sequential(L2Norm(),
@@ -32,6 +39,8 @@ class GeoLocalizationNet(nn.Module):
 
     def forward(self, x):
         x = self.backbone(x)
+        if self.attention:
+            x = self.attention(x)
         x = self.aggregation(x)
 
         return x

@@ -1,2 +1,4 @@
 .spyproject
 __pycache__
+best_model.pth
+last_model.pth

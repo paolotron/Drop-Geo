@@ -13,35 +13,43 @@ from torch.utils.data.dataset import Subset
 from sklearn.neighbors import NearestNeighbors
 from torch.utils.data.dataloader import DataLoader
 
-base_transform = transforms.Compose([
+base_transform = [
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-])
+]
 
-augmented_transform_trivial = transforms.Compose([
+augmented_transform_trivial = [
     transforms.TrivialAugmentWide(fill=[255, 255, 255]),
     transforms.ToTensor(),
-])
+]
 
-augmented_transform_cropping = transforms.Compose([
+augmented_transform_cropping = [
     transforms.RandomApply([transforms.RandomCrop((480, 640))], 0.3),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-])
+]
 
-augmented_transform_cropping_jitter = transforms.Compose([
+augmented_transform_cropping_jitter = [
     transforms.RandomApply([transforms.RandomCrop((480, 640))], 0.3),
     transforms.RandomHorizontalFlip(),
     transforms.ColorJitter(),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-])
+]
+
+augmented_transform_autaug = [
+    transforms.AutoAugmentPolicy(transforms.AutoAugmentPolicy.IMAGENET),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+]
 
 transform_list = [base_transform,
                   augmented_transform_trivial,
                   augmented_transform_cropping,
-                  augmented_transform_cropping_jitter]
+                  augmented_transform_cropping_jitter,
+                  augmented_transform_autaug]
+
 
 def path_to_pil_img(path):
     return Image.open(path).convert("RGB")
@@ -103,6 +111,10 @@ class BaseDataset(data.Dataset):
         self.soft_positives_per_query = knn.radius_neighbors(self.queries_utms,
                                                              radius=args.val_positive_dist_threshold,
                                                              return_distance=False)
+        self.transform = base_transform
+        if args.resize is not None:
+            self.transform = base_transform + [transforms.Resize(args.resize)]
+        self.transform = transforms.Compose(self.transform)
 
         self.images_paths = list(self.database_paths) + list(self.queries_paths)
 
@@ -111,7 +123,7 @@ class BaseDataset(data.Dataset):
 
     def __getitem__(self, index):
         img = path_to_pil_img(self.images_paths[index])
-        img = base_transform(img)
+        img = self.transform(img)
         return img, index
 
     def __len__(self):
@@ -140,6 +152,14 @@ class TripletsDataset(BaseDataset):
         self.negs_num_per_query = negs_num_per_query  # Number of negatives per query in each batch
         self.neg_cache = [np.empty((0,), dtype=np.int32) for _ in range(self.queries_num)]
         self.is_inference = False
+
+        self.transform = transform_list[args.augment_data]
+        self.base_transform = base_transform
+        if args.resize is not None:
+            self.transform = self.transform + [transforms.Resize(args.resize)]
+            self.base_transform = self.base_transform + [transforms.Resize(args.resize)]
+        self.transform = transforms.Compose(self.transform)
+        self.base_transform = transforms.Compose(self.base_transform)
 
         # Find hard_positives_per_query, which are within train_positives_dist_threshold (10 meters)
         knn = NearestNeighbors(n_jobs=-1)
@@ -170,14 +190,14 @@ class TripletsDataset(BaseDataset):
         query_index, best_positive_index, neg_indexes = torch.split(self.triplets_global_indexes[index],
                                                                     (1, 1, self.negs_num_per_query))
         if self.args.augment_data and self.split == "train":
-            transform = transform_list[self.args.augment_data]
-            query = transform(path_to_pil_img(self.queries_paths[query_index]))
-            positive = transform(path_to_pil_img(self.database_paths[best_positive_index]))
-            negatives = [transform(path_to_pil_img(self.database_paths[i])) for i in neg_indexes]
+            query = self.transform(path_to_pil_img(self.queries_paths[query_index]))
+            positive = self.transform(path_to_pil_img(self.database_paths[best_positive_index]))
+            negatives = [self.transform(path_to_pil_img(self.database_paths[i])) for i in neg_indexes]
         else:
-            query = base_transform(path_to_pil_img(self.queries_paths[query_index]))
-            positive = base_transform(path_to_pil_img(self.database_paths[best_positive_index]))
-            negatives = [base_transform(path_to_pil_img(self.database_paths[i])) for i in neg_indexes]
+            query = self.base_transform(path_to_pil_img(self.queries_paths[query_index]))
+            positive = self.base_transform(path_to_pil_img(self.database_paths[best_positive_index]))
+            negatives = [self.base_transform(path_to_pil_img(self.database_paths[i])) for i in neg_indexes]
+
         images = torch.stack((query, positive, *negatives), 0)
         triplets_local_indexes = torch.empty((0, 3), dtype=torch.int)
         for neg_num in range(len(neg_indexes)):
