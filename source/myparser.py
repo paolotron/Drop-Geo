@@ -42,6 +42,8 @@ def parse_arguments():
     parser.add_argument('--colab', default=False, action='store_true')
     parser.add_argument("--resume", default=False, action='store_true')
 
+    parser.add_argument("--best_model_path", type=str, default="../best_models/best_model.pth")
+
     parser.add_argument("--resize", type=int, default=None, nargs='+', help="Resize images to dimension specified")
     # Paths parameters
     parser.add_argument("--datasets_folder", type=str, required=True, help="Path with datasets")

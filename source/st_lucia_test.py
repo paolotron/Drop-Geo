@@ -14,6 +14,7 @@ if __name__ == '__main__':
 
     start_time = datetime.now()
     args.output_folder = join("runs/st_lucia", args.exp_name, start_time.strftime('%Y-%m-%d_%H-%M-%S'))
+    best_model_path = args.best_model_path
     commons.setup_logging(args.output_folder)
     commons.make_deterministic(args.seed)
     logging.info(f"Arguments: {args}")
@@ -31,7 +32,7 @@ if __name__ == '__main__':
 
     # Test best model on test set
     # Path da rivedere
-    best_model_state_dict = torch.load("../best_models/best_model.pth")["model_state_dict"]
+    best_model_state_dict = torch.load(best_model_path)["model_state_dict"]
     model.load_state_dict(best_model_state_dict)
 
     recalls, recalls_str = test.test(args, test_ds, model)
