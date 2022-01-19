@@ -44,10 +44,10 @@ class GeoLocalizationNet(nn.Module):
                                              Flatten())
 
     def forward(self, x):
-
         x = self.backbone(x)
         if self.args.attention == 1:
             x = self.attention(x)
+        x = self.aggregation(x)
         return x
 
 
