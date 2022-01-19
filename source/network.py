@@ -9,6 +9,8 @@ from NetVlad import NetVlad
 from GeM import GeM
 
 
+
+
 class GeoLocalizationNet(nn.Module):
     """The model is composed of a backbone and an aggregation layer.
     The backbone is a (cropped) ResNet-18, and the aggregation is a L2
@@ -20,10 +22,14 @@ class GeoLocalizationNet(nn.Module):
         self.backbone = get_backbone(args)
         self.encoder_dim = 256
         self.attention = None
+        self.args = args
 
-        if args.attention:
+        if args.attention == 1:
             self.attention = CBAMBlock(channel=256)
             self.attention.init_weights()
+
+        if args.attention == 2:
+            self.weight_softmax = self.backbone.fc.weight
 
         if args.netvlad_clusters is not None:
             self.aggregation = nn.Sequential(L2Norm(),
@@ -38,11 +44,10 @@ class GeoLocalizationNet(nn.Module):
                                              Flatten())
 
     def forward(self, x):
-        x = self.backbone(x)
-        if self.attention:
-            x = self.attention(x)
-        x = self.aggregation(x)
 
+        x = self.backbone(x)
+        if self.args.attention == 1:
+            x = self.attention(x)
         return x
 
 
@@ -61,9 +66,6 @@ def get_backbone(args):
     else:
         args.features_dim = 256  # Number of channels in conv4
     return backbone
-
-
-
 
 class Flatten(torch.nn.Module):
     def __init__(self):

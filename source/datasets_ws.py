@@ -44,11 +44,19 @@ augmented_transform_autaug = [
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ]
 
+augmented_transform_jitter = [
+    transforms.RandomHorizontalFlip(),
+    transforms.ColorJitter(brightness=0.7, contrast=0.7, saturation=0.7, hue=0.1),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+]
+
 transform_list = [base_transform,
                   augmented_transform_trivial,
                   augmented_transform_cropping,
                   augmented_transform_cropping_jitter,
-                  augmented_transform_autaug]
+                  augmented_transform_autaug,
+                  augmented_transform_jitter]
 
 
 def path_to_pil_img(path):

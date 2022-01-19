@@ -16,10 +16,6 @@ import myparser
 import commons
 import network
 import datasets_ws
-from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
-from google.colab import auth
-from oauth2client.client import GoogleCredentials
 
 if __name__ == '__main__':
     """
@@ -31,6 +27,11 @@ if __name__ == '__main__':
     # Initial setup: parser, logging...
     args = myparser.parse_arguments()
     start_time = datetime.now()
+    if args.resume or args.colab:
+        from pydrive.auth import GoogleAuth
+        from pydrive.drive import GoogleDrive
+        from google.colab import auth
+        from oauth2client.client import GoogleCredentials
 
     if args.resume:
         auth.authenticate_user()

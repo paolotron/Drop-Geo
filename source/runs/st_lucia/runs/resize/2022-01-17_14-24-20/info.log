@@ -1,0 +1,5 @@
+2022-01-17 14:24:20   Arguments: Namespace(attention=True, augment_data=0, best_model_path='../best_models/best_model.pth', cache_refresh_rate=1000, colab=False, datasets_folder='../data/', device='cuda', epochs_num=20, exp_name='./runs/resize', gem_power=None, infer_batch_size=16, lr=1e-06, margin=0.1, neg_samples_num=1000, negs_num_per_query=10, netvlad_clusters=64, num_workers=4, optimizer='Adam', output_folder='runs/st_lucia\\./runs/resize\\2022-01-17_14-24-20', patience=3, queries_per_epoch=3000, recall_values=[1, 5, 10, 20], resize=None, resume=False, seed=0, train_batch_size=2, train_positives_dist_threshold=10, val_positive_dist_threshold=25)
+2022-01-17 14:24:20   The outputs are being saved in runs/st_lucia\./runs/resize\2022-01-17_14-24-20
+2022-01-17 14:24:20   Using 1 GPUs and 8 CPUs
+2022-01-17 14:24:20   Test set: < BaseDataset, st_lucia - #database: 1549; #queries: 1464 >
+2022-01-17 14:25:50   Recalls on < BaseDataset, st_lucia - #database: 1549; #queries: 1464 >: R@1: 50.1, R@5: 64.4, R@10: 71.0, R@20: 78.2

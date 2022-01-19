@@ -37,24 +37,24 @@ def parse_arguments():
     parser.add_argument("--augment_data", type=int, default=0, help="Augment training data with transforms:"
                                                                     "0: No transforms "
                                                                     "1: Trivial Transforms "
-                                                                    "2: Random Croppings"
-                                                                    "3: Random Croppings and jitter")
+                                                                    "2: Random Croppings "
+                                                                    "3: Random Croppings and jitter "
+                                                                    "4: Autotransform with Imagenet policy "
+                                                                    "5: Random realistic jitter")
     parser.add_argument('--colab', default=False, action='store_true')
     parser.add_argument("--resume", default=False, action='store_true')
-
-    parser.add_argument("--best_model_path", type=str, default="../best_models/best_model.pth")
-
     parser.add_argument("--resize", type=int, default=None, nargs='+', help="Resize images to dimension specified")
     # Paths parameters
     parser.add_argument("--datasets_folder", type=str, required=True, help="Path with datasets")
     parser.add_argument("--exp_name", type=str, default="default",
                         help="Folder name of the current run (saved in ./runs/)")
+    parser.add_argument("--best_model_path", type=str, default="../best_models/best_model.pth", help="Path to model used for testing")
 
     # Network variants parameters
     parser.add_argument("--netvlad_clusters", type=int, help="use vlad layer with specified number"
                                                              " of clusters if not specified avgPooling is used instead")
     parser.add_argument("--gem_power", type=float, help="use gem layer with initial p value")
-    parser.add_argument("--attention", type=bool, default=False, help="use CRAM attention layer between backbone and aggregation layer")
+    parser.add_argument("--attention", type=int, default=0, help="use CRAM attention layer between backbone and aggregation layer")
 
     args = parser.parse_args()
     
