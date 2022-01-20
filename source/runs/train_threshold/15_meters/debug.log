@@ -1,0 +1,213 @@
+2022-01-17 11:08:10   Arguments: Namespace(attention=False, augment_data=0, cache_refresh_rate=1000, colab=True, datasets_folder='Drop-Geo/dataset/', device='cuda', epochs_num=20, exp_name='distance_train', gem_power=None, infer_batch_size=16, lr=0.0001, margin=0.1, neg_samples_num=1000, negs_num_per_query=10, netvlad_clusters=64, num_workers=2, optimizer='Adam', output_folder='Drop-Geo/source/runs/distance_train/2022-01-17_11-08-10', patience=3, queries_per_epoch=3000, recall_values=[1, 5, 10, 20], resize=None, resume=False, seed=0, train_batch_size=2, train_positives_dist_threshold=15, val_positive_dist_threshold=25)
+2022-01-17 11:08:10   The outputs are being saved in Drop-Geo/source/runs/distance_train/2022-01-17_11-08-10
+2022-01-17 11:08:10   Using 1 GPUs and 2 CPUs
+2022-01-17 11:08:10   Loading dataset Pitts30k from folder Drop-Geo/dataset/
+2022-01-17 11:08:10   There are 48 queries without any positives within the training set. They won't be considered as they're useless for training.
+2022-01-17 11:08:11   Train query set: < TripletsDataset, pitts30k - #database: 10000; #queries: 7368 >
+2022-01-17 11:08:11   Val set: < BaseDataset, pitts30k - #database: 10000; #queries: 7608 >
+2022-01-17 11:08:11   Test set: < BaseDataset, pitts30k - #database: 10000; #queries: 6816 >
+2022-01-17 11:08:15   Output dimension of the model is 16384
+2022-01-17 11:08:15   Start training epoch: 00
+2022-01-17 11:08:15   Cache: 0 / 3
+2022-01-17 11:14:47   Epoch[00](0/3): current batch triplet loss = 0.0116, average epoch triplet loss = 0.0492
+2022-01-17 11:14:47   Cache: 1 / 3
+2022-01-17 11:21:16   Epoch[00](1/3): current batch triplet loss = 0.0191, average epoch triplet loss = 0.0413
+2022-01-17 11:21:16   Cache: 2 / 3
+2022-01-17 11:27:46   Epoch[00](2/3): current batch triplet loss = 0.0181, average epoch triplet loss = 0.0355
+2022-01-17 11:27:46   Finished epoch 00 in 0:19:31, average epoch triplet loss = 0.0355
+2022-01-17 11:27:46   Extracting database features for evaluation/testing
+2022-01-17 11:29:47   Extracting queries features for evaluation/testing
+2022-01-17 11:31:19   Calculating recalls
+2022-01-17 11:31:51   Recalls on val set < BaseDataset, pitts30k - #database: 10000; #queries: 7608 >: R@1: 81.3, R@5: 90.8, R@10: 93.5, R@20: 95.7
+2022-01-17 11:31:51   Improved: previous best R@5 = 0.0, current R@5 = 90.8
+2022-01-17 11:31:51   Refreshing access_token
+2022-01-17 11:31:51   file_cache is unavailable when using oauth2client >= 4.0.0 or google-auth
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/dist-packages/googleapiclient/discovery_cache/file_cache.py", line 33, in <module>
+    from oauth2client.contrib.locked_file import LockedFile
+ModuleNotFoundError: No module named 'oauth2client.contrib.locked_file'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/dist-packages/googleapiclient/discovery_cache/file_cache.py", line 37, in <module>
+    from oauth2client.locked_file import LockedFile
+ModuleNotFoundError: No module named 'oauth2client.locked_file'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/dist-packages/googleapiclient/discovery_cache/__init__.py", line 44, in autodetect
+    from . import file_cache
+  File "/usr/local/lib/python3.7/dist-packages/googleapiclient/discovery_cache/file_cache.py", line 41, in <module>
+    "file_cache is unavailable when using oauth2client >= 4.0.0 or google-auth"
+ImportError: file_cache is unavailable when using oauth2client >= 4.0.0 or google-auth
+2022-01-17 11:31:51   URL being requested: GET https://www.googleapis.com/discovery/v1/apis/drive/v2/rest
+2022-01-17 11:31:51   URL being requested: POST https://www.googleapis.com/upload/drive/v2/files?alt=json&uploadType=resumable
+2022-01-17 11:31:52   URL being requested: POST https://www.googleapis.com/upload/drive/v2/files?alt=json&uploadType=resumable
+2022-01-17 11:31:53   URL being requested: POST https://www.googleapis.com/upload/drive/v2/files?alt=json&uploadType=resumable
+2022-01-17 11:31:54   URL being requested: POST https://www.googleapis.com/upload/drive/v2/files?alt=json&uploadType=resumable
+2022-01-17 11:31:55   Start training epoch: 01
+2022-01-17 11:31:55   Cache: 0 / 3
+2022-01-17 11:39:08   Epoch[01](0/3): current batch triplet loss = 0.0418, average epoch triplet loss = 0.0187
+2022-01-17 11:39:08   Cache: 1 / 3
+2022-01-17 11:46:20   Epoch[01](1/3): current batch triplet loss = 0.0123, average epoch triplet loss = 0.0170
+2022-01-17 11:46:20   Cache: 2 / 3
+2022-01-17 11:53:38   Epoch[01](2/3): current batch triplet loss = 0.0044, average epoch triplet loss = 0.0153
+2022-01-17 11:53:38   Finished epoch 01 in 0:21:43, average epoch triplet loss = 0.0153
+2022-01-17 11:53:38   Extracting database features for evaluation/testing
+2022-01-17 11:55:37   Extracting queries features for evaluation/testing
+2022-01-17 11:57:08   Calculating recalls
+2022-01-17 11:57:40   Recalls on val set < BaseDataset, pitts30k - #database: 10000; #queries: 7608 >: R@1: 82.1, R@5: 91.6, R@10: 94.1, R@20: 96.1
+2022-01-17 11:57:40   Improved: previous best R@5 = 90.8, current R@5 = 91.6
+2022-01-17 11:57:40   Refreshing access_token
+2022-01-17 11:57:40   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1mfXU0HE8rc1uZ1DryrXxAPvtEQkzSuoL?alt=json&uploadType=resumable
+2022-01-17 11:57:41   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1v8wSE64f1kcUov0YiM0koi1lY8aLBVBU?alt=json&uploadType=resumable
+2022-01-17 11:57:42   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1QdrfYMOYObZmZLmlh0x2J9dkSzxj1fUL?alt=json&uploadType=resumable
+2022-01-17 11:57:43   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1Bbe-EXAlaSzdgGAtXIkEegm-IW21nOMx?alt=json&uploadType=resumable
+2022-01-17 11:57:44   Start training epoch: 02
+2022-01-17 11:57:44   Cache: 0 / 3
+2022-01-17 12:04:21   Epoch[02](0/3): current batch triplet loss = 0.0253, average epoch triplet loss = 0.0104
+2022-01-17 12:04:21   Cache: 1 / 3
+2022-01-17 12:10:59   Epoch[02](1/3): current batch triplet loss = 0.0050, average epoch triplet loss = 0.0104
+2022-01-17 12:10:59   Cache: 2 / 3
+2022-01-17 12:17:36   Epoch[02](2/3): current batch triplet loss = 0.0000, average epoch triplet loss = 0.0099
+2022-01-17 12:17:36   Finished epoch 02 in 0:19:51, average epoch triplet loss = 0.0099
+2022-01-17 12:17:36   Extracting database features for evaluation/testing
+2022-01-17 12:19:38   Extracting queries features for evaluation/testing
+2022-01-17 12:21:09   Calculating recalls
+2022-01-17 12:21:42   Recalls on val set < BaseDataset, pitts30k - #database: 10000; #queries: 7608 >: R@1: 81.5, R@5: 90.8, R@10: 92.9, R@20: 95.3
+2022-01-17 12:21:42   Not improved: 1 / 3: best R@5 = 91.6, current R@5 = 90.8
+2022-01-17 12:21:42   Refreshing access_token
+2022-01-17 12:21:42   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1mfXU0HE8rc1uZ1DryrXxAPvtEQkzSuoL?alt=json&uploadType=resumable
+2022-01-17 12:21:43   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1v8wSE64f1kcUov0YiM0koi1lY8aLBVBU?alt=json&uploadType=resumable
+2022-01-17 12:21:43   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1QdrfYMOYObZmZLmlh0x2J9dkSzxj1fUL?alt=json&uploadType=resumable
+2022-01-17 12:21:45   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1Bbe-EXAlaSzdgGAtXIkEegm-IW21nOMx?alt=json&uploadType=resumable
+2022-01-17 12:21:46   Start training epoch: 03
+2022-01-17 12:21:46   Cache: 0 / 3
+2022-01-17 12:28:25   Epoch[03](0/3): current batch triplet loss = 0.0085, average epoch triplet loss = 0.0072
+2022-01-17 12:28:25   Cache: 1 / 3
+2022-01-17 12:35:03   Epoch[03](1/3): current batch triplet loss = 0.0500, average epoch triplet loss = 0.0073
+2022-01-17 12:35:03   Cache: 2 / 3
+2022-01-17 12:41:43   Epoch[03](2/3): current batch triplet loss = 0.0013, average epoch triplet loss = 0.0072
+2022-01-17 12:41:43   Finished epoch 03 in 0:19:57, average epoch triplet loss = 0.0072
+2022-01-17 12:41:43   Extracting database features for evaluation/testing
+2022-01-17 12:43:45   Extracting queries features for evaluation/testing
+2022-01-17 12:45:17   Calculating recalls
+2022-01-17 12:45:49   Recalls on val set < BaseDataset, pitts30k - #database: 10000; #queries: 7608 >: R@1: 82.1, R@5: 91.7, R@10: 94.5, R@20: 96.3
+2022-01-17 12:45:49   Improved: previous best R@5 = 91.6, current R@5 = 91.7
+2022-01-17 12:45:49   Refreshing access_token
+2022-01-17 12:45:49   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1mfXU0HE8rc1uZ1DryrXxAPvtEQkzSuoL?alt=json&uploadType=resumable
+2022-01-17 12:45:50   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1v8wSE64f1kcUov0YiM0koi1lY8aLBVBU?alt=json&uploadType=resumable
+2022-01-17 12:45:51   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1QdrfYMOYObZmZLmlh0x2J9dkSzxj1fUL?alt=json&uploadType=resumable
+2022-01-17 12:45:52   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1Bbe-EXAlaSzdgGAtXIkEegm-IW21nOMx?alt=json&uploadType=resumable
+2022-01-17 12:45:53   Start training epoch: 04
+2022-01-17 12:45:53   Cache: 0 / 3
+2022-01-17 12:52:32   Epoch[04](0/3): current batch triplet loss = 0.0006, average epoch triplet loss = 0.0067
+2022-01-17 12:52:32   Cache: 1 / 3
+2022-01-17 12:59:13   Epoch[04](1/3): current batch triplet loss = 0.0050, average epoch triplet loss = 0.0063
+2022-01-17 12:59:13   Cache: 2 / 3
+2022-01-17 13:05:53   Epoch[04](2/3): current batch triplet loss = 0.0050, average epoch triplet loss = 0.0063
+2022-01-17 13:05:53   Finished epoch 04 in 0:19:59, average epoch triplet loss = 0.0063
+2022-01-17 13:05:53   Extracting database features for evaluation/testing
+2022-01-17 13:07:54   Extracting queries features for evaluation/testing
+2022-01-17 13:09:26   Calculating recalls
+2022-01-17 13:09:57   Recalls on val set < BaseDataset, pitts30k - #database: 10000; #queries: 7608 >: R@1: 83.6, R@5: 92.3, R@10: 94.4, R@20: 96.3
+2022-01-17 13:09:58   Improved: previous best R@5 = 91.7, current R@5 = 92.3
+2022-01-17 13:09:58   Refreshing access_token
+2022-01-17 13:09:58   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1mfXU0HE8rc1uZ1DryrXxAPvtEQkzSuoL?alt=json&uploadType=resumable
+2022-01-17 13:09:58   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1v8wSE64f1kcUov0YiM0koi1lY8aLBVBU?alt=json&uploadType=resumable
+2022-01-17 13:09:59   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1QdrfYMOYObZmZLmlh0x2J9dkSzxj1fUL?alt=json&uploadType=resumable
+2022-01-17 13:10:01   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1Bbe-EXAlaSzdgGAtXIkEegm-IW21nOMx?alt=json&uploadType=resumable
+2022-01-17 13:10:02   Start training epoch: 05
+2022-01-17 13:10:02   Cache: 0 / 3
+2022-01-17 13:16:40   Epoch[05](0/3): current batch triplet loss = 0.0000, average epoch triplet loss = 0.0062
+2022-01-17 13:16:40   Cache: 1 / 3
+2022-01-17 13:23:18   Epoch[05](1/3): current batch triplet loss = 0.0535, average epoch triplet loss = 0.0062
+2022-01-17 13:23:18   Cache: 2 / 3
+2022-01-17 13:29:55   Epoch[05](2/3): current batch triplet loss = 0.0111, average epoch triplet loss = 0.0059
+2022-01-17 13:29:55   Finished epoch 05 in 0:19:53, average epoch triplet loss = 0.0059
+2022-01-17 13:29:55   Extracting database features for evaluation/testing
+2022-01-17 13:31:56   Extracting queries features for evaluation/testing
+2022-01-17 13:33:28   Calculating recalls
+2022-01-17 13:33:59   Recalls on val set < BaseDataset, pitts30k - #database: 10000; #queries: 7608 >: R@1: 83.2, R@5: 92.2, R@10: 94.5, R@20: 96.0
+2022-01-17 13:34:00   Not improved: 1 / 3: best R@5 = 92.3, current R@5 = 92.2
+2022-01-17 13:34:00   Refreshing access_token
+2022-01-17 13:34:00   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1mfXU0HE8rc1uZ1DryrXxAPvtEQkzSuoL?alt=json&uploadType=resumable
+2022-01-17 13:34:00   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1v8wSE64f1kcUov0YiM0koi1lY8aLBVBU?alt=json&uploadType=resumable
+2022-01-17 13:34:01   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1QdrfYMOYObZmZLmlh0x2J9dkSzxj1fUL?alt=json&uploadType=resumable
+2022-01-17 13:34:03   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1Bbe-EXAlaSzdgGAtXIkEegm-IW21nOMx?alt=json&uploadType=resumable
+2022-01-17 13:34:04   Start training epoch: 06
+2022-01-17 13:34:04   Cache: 0 / 3
+2022-01-17 13:40:44   Epoch[06](0/3): current batch triplet loss = 0.0059, average epoch triplet loss = 0.0054
+2022-01-17 13:40:44   Cache: 1 / 3
+2022-01-17 13:47:21   Epoch[06](1/3): current batch triplet loss = 0.0132, average epoch triplet loss = 0.0052
+2022-01-17 13:47:21   Cache: 2 / 3
+2022-01-17 13:53:59   Epoch[06](2/3): current batch triplet loss = 0.0055, average epoch triplet loss = 0.0053
+2022-01-17 13:53:59   Finished epoch 06 in 0:19:55, average epoch triplet loss = 0.0053
+2022-01-17 13:53:59   Extracting database features for evaluation/testing
+2022-01-17 13:56:00   Extracting queries features for evaluation/testing
+2022-01-17 13:57:32   Calculating recalls
+2022-01-17 13:58:03   Recalls on val set < BaseDataset, pitts30k - #database: 10000; #queries: 7608 >: R@1: 83.8, R@5: 93.0, R@10: 95.2, R@20: 97.0
+2022-01-17 13:58:03   Improved: previous best R@5 = 92.3, current R@5 = 93.0
+2022-01-17 13:58:03   Refreshing access_token
+2022-01-17 13:58:03   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1mfXU0HE8rc1uZ1DryrXxAPvtEQkzSuoL?alt=json&uploadType=resumable
+2022-01-17 13:58:04   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1v8wSE64f1kcUov0YiM0koi1lY8aLBVBU?alt=json&uploadType=resumable
+2022-01-17 13:58:05   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1QdrfYMOYObZmZLmlh0x2J9dkSzxj1fUL?alt=json&uploadType=resumable
+2022-01-17 13:58:06   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1Bbe-EXAlaSzdgGAtXIkEegm-IW21nOMx?alt=json&uploadType=resumable
+2022-01-17 13:58:07   Start training epoch: 07
+2022-01-17 13:58:07   Cache: 0 / 3
+2022-01-17 14:04:45   Epoch[07](0/3): current batch triplet loss = 0.0000, average epoch triplet loss = 0.0053
+2022-01-17 14:04:45   Cache: 1 / 3
+2022-01-17 14:11:22   Epoch[07](1/3): current batch triplet loss = 0.0068, average epoch triplet loss = 0.0050
+2022-01-17 14:11:22   Cache: 2 / 3
+2022-01-17 14:18:00   Epoch[07](2/3): current batch triplet loss = 0.0080, average epoch triplet loss = 0.0049
+2022-01-17 14:18:00   Finished epoch 07 in 0:19:52, average epoch triplet loss = 0.0049
+2022-01-17 14:18:00   Extracting database features for evaluation/testing
+2022-01-17 14:20:00   Extracting queries features for evaluation/testing
+2022-01-17 14:21:32   Calculating recalls
+2022-01-17 14:22:04   Recalls on val set < BaseDataset, pitts30k - #database: 10000; #queries: 7608 >: R@1: 82.0, R@5: 91.6, R@10: 94.5, R@20: 96.4
+2022-01-17 14:22:04   Not improved: 1 / 3: best R@5 = 93.0, current R@5 = 91.6
+2022-01-17 14:22:04   Refreshing access_token
+2022-01-17 14:22:04   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1mfXU0HE8rc1uZ1DryrXxAPvtEQkzSuoL?alt=json&uploadType=resumable
+2022-01-17 14:22:05   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1v8wSE64f1kcUov0YiM0koi1lY8aLBVBU?alt=json&uploadType=resumable
+2022-01-17 14:22:06   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1QdrfYMOYObZmZLmlh0x2J9dkSzxj1fUL?alt=json&uploadType=resumable
+2022-01-17 14:22:07   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1Bbe-EXAlaSzdgGAtXIkEegm-IW21nOMx?alt=json&uploadType=resumable
+2022-01-17 14:22:08   Start training epoch: 08
+2022-01-17 14:22:08   Cache: 0 / 3
+2022-01-17 14:28:47   Epoch[08](0/3): current batch triplet loss = 0.0025, average epoch triplet loss = 0.0050
+2022-01-17 14:28:47   Cache: 1 / 3
+2022-01-17 14:35:26   Epoch[08](1/3): current batch triplet loss = 0.0000, average epoch triplet loss = 0.0051
+2022-01-17 14:35:26   Cache: 2 / 3
+2022-01-17 14:42:08   Epoch[08](2/3): current batch triplet loss = 0.0012, average epoch triplet loss = 0.0050
+2022-01-17 14:42:08   Finished epoch 08 in 0:19:59, average epoch triplet loss = 0.0050
+2022-01-17 14:42:08   Extracting database features for evaluation/testing
+2022-01-17 14:44:08   Extracting queries features for evaluation/testing
+2022-01-17 14:45:40   Calculating recalls
+2022-01-17 14:46:11   Recalls on val set < BaseDataset, pitts30k - #database: 10000; #queries: 7608 >: R@1: 84.5, R@5: 93.0, R@10: 95.1, R@20: 97.0
+2022-01-17 14:46:11   Not improved: 2 / 3: best R@5 = 93.0, current R@5 = 93.0
+2022-01-17 14:46:11   Refreshing access_token
+2022-01-17 14:46:11   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1mfXU0HE8rc1uZ1DryrXxAPvtEQkzSuoL?alt=json&uploadType=resumable
+2022-01-17 14:46:12   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1v8wSE64f1kcUov0YiM0koi1lY8aLBVBU?alt=json&uploadType=resumable
+2022-01-17 14:46:13   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1QdrfYMOYObZmZLmlh0x2J9dkSzxj1fUL?alt=json&uploadType=resumable
+2022-01-17 14:46:15   URL being requested: PUT https://www.googleapis.com/upload/drive/v2/files/1Bbe-EXAlaSzdgGAtXIkEegm-IW21nOMx?alt=json&uploadType=resumable
+2022-01-17 14:46:16   Start training epoch: 09
+2022-01-17 14:46:16   Cache: 0 / 3
+2022-01-17 14:53:00   Epoch[09](0/3): current batch triplet loss = 0.0000, average epoch triplet loss = 0.0050
+2022-01-17 14:53:00   Cache: 1 / 3
+2022-01-17 14:59:44   Epoch[09](1/3): current batch triplet loss = 0.0063, average epoch triplet loss = 0.0056
+2022-01-17 14:59:44   Cache: 2 / 3
+2022-01-17 15:06:29   Epoch[09](2/3): current batch triplet loss = 0.0000, average epoch triplet loss = 0.0052
+2022-01-17 15:06:29   Finished epoch 09 in 0:20:13, average epoch triplet loss = 0.0052
+2022-01-17 15:06:29   Extracting database features for evaluation/testing
+2022-01-17 15:08:30   Extracting queries features for evaluation/testing
+2022-01-17 15:10:01   Calculating recalls
+2022-01-17 15:10:34   Recalls on val set < BaseDataset, pitts30k - #database: 10000; #queries: 7608 >: R@1: 82.6, R@5: 92.2, R@10: 94.9, R@20: 96.6
+2022-01-17 15:10:35   Not improved: 3 / 3: best R@5 = 93.0, current R@5 = 92.2
+2022-01-17 15:10:35   Performance did not improve for 3 epochs. Stop training.
+2022-01-17 15:10:35   Best R@5: 93.0
+2022-01-17 15:10:35   Trained for 11 epochs, in total in 4:02:24
+2022-01-17 15:10:35   Extracting database features for evaluation/testing
+2022-01-17 15:12:36   Extracting queries features for evaluation/testing
+2022-01-17 15:13:59   Calculating recalls
+2022-01-17 15:14:28   Recalls on < BaseDataset, pitts30k - #database: 10000; #queries: 6816 >: R@1: 81.6, R@5: 91.1, R@10: 93.4, R@20: 95.3
