@@ -16,6 +16,8 @@ import myparser
 import commons
 import network
 import datasets_ws
+import loss
+
 
 if __name__ == '__main__':
     """
@@ -185,9 +187,19 @@ if __name__ == '__main__':
                     triplets_local_indexes.view(args.train_batch_size, args.negs_num_per_query, 3), 1, 0)
                 for triplets in triplets_local_indexes:
                     queries_indexes, positives_indexes, negatives_indexes = triplets.T
-                    loss_triplet += criterion_triplet(features[queries_indexes],
-                                                      features[positives_indexes],
-                                                      features[negatives_indexes])
+                    if args.loss == "triplet_ranking":
+                        loss_triplet += criterion_triplet(features[queries_indexes],
+                                                          features[positives_indexes],
+                                                          features[negatives_indexes])
+                    else:
+                        output_features = torch.Tensor().to(args.device)
+                        for q, p, n in zip(queries_indexes, positives_indexes, negatives_indexes):
+                            queries = features[q]
+                            positives = features[p]
+                            negatives = features[n]
+                            output_features = torch.cat((output_features, queries, positives, negatives))
+                        loss_triplet += loss.sare_loss(output_features, args.train_batch_size, 3, loss_type=args.loss)
+
                 del features
                 loss_triplet /= (args.train_batch_size * args.negs_num_per_query)
 

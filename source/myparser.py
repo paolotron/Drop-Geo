@@ -55,6 +55,7 @@ def parse_arguments():
                                                              " of clusters if not specified avgPooling is used instead")
     parser.add_argument("--gem_power", type=float, help="use gem layer with initial p value")
     parser.add_argument("--attention", type=int, default=0, help="use CRAM attention layer between backbone and aggregation layer")
+    parser.add_argument("--loss", type=str, default="triplet ranking", choises=["triplet_ranking", "sare_ind", "sare_joint"])
 
     args = parser.parse_args()
     
