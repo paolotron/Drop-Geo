@@ -1,0 +1,5 @@
+2022-01-21 11:04:39   Arguments: Namespace(attention=0, augment_data=0, best_model_path='Drop-Geo/best_models/best_model.pth', cache_refresh_rate=1000, colab=False, datasets_folder='Drop-Geo/dataset/', device='cuda', epochs_num=20, exp_name='distance_train', gem_power=None, infer_batch_size=16, loss='triplet_ranking', lr=1e-06, margin=0.1, neg_samples_num=1000, negs_num_per_query=10, netvlad_clusters=64, num_workers=2, optimizer='Adam', output_folder='runs/pitts30k/distance_train/2022-01-21_11-04-39', patience=3, queries_per_epoch=3000, recall_values=[1, 5, 10, 20], resize=None, resume=False, seed=0, train_batch_size=2, train_positives_dist_threshold=5, val_positive_dist_threshold=20)
+2022-01-21 11:04:39   The outputs are being saved in runs/pitts30k/distance_train/2022-01-21_11-04-39
+2022-01-21 11:04:39   Using 1 GPUs and 2 CPUs
+2022-01-21 11:04:39   Test set: < BaseDataset, pitts30k - #database: 10000; #queries: 6816 >
+2022-01-21 11:08:36   Recalls on < BaseDataset, pitts30k - #database: 10000; #queries: 6816 >: R@1: 79.9, R@5: 90.0, R@10: 92.4, R@20: 94.1
