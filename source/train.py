@@ -228,7 +228,6 @@ if __name__ == '__main__':
         logging.info(f"Recalls on val set {val_ds}: {recalls_str}")
 
         is_best = recalls[1] > best_r5
-        epoch_num += 1
 
         # Save checkpoint, which contains all training parameters
         util.save_checkpoint(args, {"epoch_num": epoch_num, "model_state_dict": model.state_dict(),
@@ -236,6 +235,8 @@ if __name__ == '__main__':
                                     "best_r5": best_r5,
                                     "not_improved_num": not_improved_num
                                     }, is_best, filename="last_model.pth")
+
+        epoch_num += 1
 
         # If recall@5 did not improve for "many" epochs, stop training
         if is_best:
