@@ -85,6 +85,10 @@ if __name__ == '__main__':
         path = drive.CreateFile({'title': 'path.txt'})
 
         args.output_folder = join("Drop-Geo/source/runs", args.exp_name, start_time.strftime('%Y-%m-%d_%H-%M-%S'))
+
+        path.SetContentString(args.output_folder)
+        path.Upload()
+
         commons.setup_logging(args.output_folder)
     else:
         args.output_folder = join("runs", args.exp_name, start_time.strftime('%Y-%m-%d_%H-%M-%S'))
