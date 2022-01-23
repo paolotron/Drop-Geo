@@ -1,0 +1,9 @@
+2022-01-23 11:26:16   Arguments: Namespace(attention=0, augment_data=0, best_model_path='best_model.pth', cache_refresh_rate=1000, colab=False, datasets_folder='Drop-Geo/dataset/', device='cuda', epochs_num=20, exp_name='distance_train_norm', gem_power=None, infer_batch_size=16, loss='triplet_ranking', lr=1e-06, margin=0.1, neg_samples_num=1000, negs_num_per_query=10, netvlad_clusters=64, num_workers=2, optimizer='Adam', output_folder='runs/pitts30k/distance_train_norm/2022-01-23_11-26-16', patience=3, queries_per_epoch=3000, recall_values=[1, 5, 10, 20], resize=None, resume=False, seed=0, train_batch_size=2, train_positives_dist_threshold=10, val_positive_dist_threshold=20)
+2022-01-23 11:26:16   The outputs are being saved in runs/pitts30k/distance_train_norm/2022-01-23_11-26-16
+2022-01-23 11:26:16   Using 1 GPUs and 2 CPUs
+2022-01-23 11:26:16   Loading dataset pitts30k from folder Drop-Geo/dataset/
+2022-01-23 11:26:17   Test set: < BaseDataset, pitts30k - #database: 10000; #queries: 6816 >
+2022-01-23 11:26:19   Extracting database features for evaluation/testing
+2022-01-23 11:29:36   Extracting queries features for evaluation/testing
+2022-01-23 11:31:50   Calculating recalls
+2022-01-23 11:32:29   Recalls on < BaseDataset, pitts30k - #database: 10000; #queries: 6816 >: R@1: 80.4, R@5: 90.3, R@10: 92.5, R@20: 94.2
